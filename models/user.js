@@ -25,5 +25,20 @@ const userSchema = new Schema({
             trim: true,
             match: [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, 'Please enter a valid email address']
         },
+        /* Setting the type to the ObjectId of the referred schema, in this case Thought.
+        Basically, this will populate the thoughts property with an array of ObjectIds, making it contain the thoughts connected to the user associated
+        */
+        thoughts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Thought'
+        }],
+        /* Setting the type to the ObjectId of the referred schema, in this case User.
+        Basically, this will populate the friends property with an array of ObjectIds, making it contain the friends connected to the user associated
+        */
+        friends: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }],
+
 
 })

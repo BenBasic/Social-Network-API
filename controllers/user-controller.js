@@ -43,4 +43,14 @@ const userController = {
             res.status(400).json(err);
         })
     },
+    // Creates a user, adding it to the userSchema, uses User.create(body) to add the body from the post request into the userSchema
+    createUser({ body }, res) {
+        User.create(body)
+        .then (dbUserData => res.json(dbUserData)) // Returning the result data as JSON Object
+        .catch(err => {
+            // if there is an error, it will log an error
+            console.log(err)
+            res.status(400).json(err)
+        })
+    },
 }

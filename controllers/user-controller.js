@@ -53,4 +53,23 @@ const userController = {
             res.status(400).json(err)
         })
     },
+    /* Updates one of the users from the userSchema, uses User.findOneAndUpdate to find one document within that has a matching id parameter and update it with the body from the put request,
+    new: true to return the modified document,
+    runValidators: true to validate the document before updating
+    */
+    updateUser({ params, body }, res) {
+        User.findOneAndUpdate({ _id: params.id }, body, {
+            new: true,
+            runValidators: true
+        })
+        .then((dbUserData) => {
+            // If there is no matching id for the User requested, log an error
+            if (!dbUserData) {
+                res.status(404).json({ message: "No user with this id exists" });
+                return;
+            }
+            res.json(dbUserData); // Returning the result data as JSON Object
+        })
+        .catch((err) => res.status(400).json(err)); // if there is an error, it will log an error
+    },
 }

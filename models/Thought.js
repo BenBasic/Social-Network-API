@@ -10,12 +10,26 @@ const reactionSchema = new Schema ({
         default: () => new Types.ObjectId()
     },
     /* Making the reactionBody require a string value,
-    the reactionBody property a required property in the reactionSchema,
+    the reactionBody property is a required property in the reactionSchema,
     the value of the reactionBody can only be a maximum of 280 characters, it can't be longer than that
     */
     reactionBody: {
         type: String,
         required: true,
         maxLength: 280
+    },
+    /* Making the username require a string value,
+    the username property is a required property in the reactionSchema,
+    */
+    username: {
+        type: String,
+        required: true
+    },
+    /* Making the createdAt require a date value,
+    the default value for the paths will be the value generated from the Date.now method which creates a Number representing the milliseconds elapsed since the UNIX epoch (example: 1519211809934)
+    */
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 })

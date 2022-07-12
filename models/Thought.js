@@ -16,7 +16,7 @@ const reactionSchema = new Schema ({
     reactionBody: {
         type: String,
         required: true,
-        maxLength: 280
+        maxlength: 280
     },
     /* Making the username require a string value,
     the username property is a required property in the reactionSchema,
@@ -30,6 +30,58 @@ const reactionSchema = new Schema ({
     */
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+        get: (createdAtVal) => dateFormat(createdAtVal)
     }
-})
+},
+{
+    // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
+    /* Using the toJSON schema option to use a JSON for the MongoDB query,
+    setting getters: true to allow .get use of the data for the schema, I believe this is the default behavior of JSON within MongoDB but I figure it doesn't hurt to include it just in case
+    */
+    toJSON: {
+        getters: true
+    }
+});
+
+const thoughtSchema = new Schema({
+    /* Making the thoughtText require a string value,
+    the thoughtText property is a required property in the thoughtSchema,
+    the value of the thoughtText can only be a maximum of 280 characters, it can't be longer than that
+    */
+    thoughtText: {
+        type: String,
+        required: true,
+        maxlength: 280
+    },
+    /* Making the createdAt require a date value,
+    the default value for the paths will be the value generated from the Date.now method which creates a Number representing the milliseconds elapsed since the UNIX epoch (example: 1519211809934)
+    */
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        get: (createdAtVal) => dateFormat(createdAtVal)
+    },
+    /* Making the username require a string value,
+    the username property is a required property in the thoughtSchema,
+    */
+    username: {
+        type: String,
+        required: true
+    },
+    // Assigning reactions property to be an array of documents from the reactionSchema
+    reactions: [reactionSchema]
+},
+{
+    // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
+    /* Using the toJSON schema option to use a JSON for the MongoDB query,
+    setting virtuals: true to tell the program we want virtuals to be included with our response, overriding the default behavior,
+    setting getters: true to allow .get use of the data for the schema, I believe this is the default behavior of JSON within MongoDB but I figure it doesn't hurt to include it just in case,
+    setting id: false to exclude it from getting the id property
+    */
+    toJSON: {
+        virtuals: true,
+        getters: true
+    },
+    id: false
+});

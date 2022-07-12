@@ -44,7 +44,7 @@ const userSchema = new Schema({
     /* Using the toJSON schema option to use a JSON for the MongoDB query,
     setting virtuals: true to tell the program we want virtuals to be included with our response, overriding the default behavior,
     setting getters: true to allow .get use of the data for the schema, I believe this is the default behavior of JSON within MongoDB but I figure it doesn't hurt to include it just in case,
-    setting id: false to excluse it from getting the id property
+    setting id: false to exclude it from getting the id property
     */
     {
         toJSON: {

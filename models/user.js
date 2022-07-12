@@ -39,6 +39,6 @@ const userSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'User'
         }],
-
+        // Needed to add this line to change file name in git
 
 })

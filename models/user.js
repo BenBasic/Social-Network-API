@@ -38,7 +38,30 @@ const userSchema = new Schema({
         friends: [{
             type: Schema.Types.ObjectId,
             ref: 'User'
-        }],
-        // Needed to add this line to change file name in git
+        }]
+    },
+    // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
+    /* Using the toJSON schema option to use a JSON for the MongoDB query,
+    setting virtuals: true to tell the program we want virtuals to be included with our response, overriding the default behavior,
+    setting getters: true to allow .get use of the data for the schema, I believe this is the default behavior of JSON within MongoDB but I figure it doesn't hurt to include it just in case,
+    setting id: false to excluse it from getting the id property
+    */
+    {
+        toJSON: {
+            virtuals: true,
+            getters: true
+        },
+        id: false
+    }
+);
 
-})
+// Gets a total count of friends for the user's friends list, uses a virtual to create a friendCount property on the document for this to work
+userSchema.virtual('friendCount').get(function () {
+    return this.friends.length;
+});
+
+// Creates the User model using userSchema
+const User = model('User', userSchema);
+
+// Exports module for use in other files
+module.exports = User;

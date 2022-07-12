@@ -85,3 +85,14 @@ const thoughtSchema = new Schema({
     },
     id: false
 });
+
+// Gets a total count of reactions for the thought's reaction list, uses a virtual to create a reactionCount property on the document for this to work
+thoughtSchema.virtual("reactionCount").get(function () {
+    return this.reactions.length;
+});
+
+// Creates the Thought model using thoughtSchema
+const Thought = model("Thought", thoughtSchema);
+
+// Exports module for use in other files
+module.exports = Thought;

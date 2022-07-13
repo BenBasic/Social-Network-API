@@ -24,7 +24,7 @@ const thoughtController = {
         .select("-__v")
         .then((dbThoughtData) => {
             if (!dbThoughtData) {
-                // If there is no matching id for the User requested, log an error
+                // If there is no matching id for the Thought requested, log an error
                 res.status(404).json({ message: "No thought with this id exists" });
                 return;
             }
@@ -36,4 +36,29 @@ const thoughtController = {
             res.status(400).json(err);
         });
     },
+    // Creates a thought, adding it to the thoughtSchema, uses Thought.create(body) to add the body from the post request into the thoughtSchema
+    addThought({ params, body }, res) {
+        Thought.create(body)
+            .then(({ _id }) => {
+                /* Updates one of the users from the userSchema, uses User.findOneAndUpdate to find one document within that has a matching id parameter,
+                then pushes the created thought into the thoughts array,
+                new: true to return the modified document
+                */
+                return User.findOneAndUpdate(
+                    { _id: params.userId },
+                    { $push: { thoughts: _id } },
+                    { new: true }
+                );
+            })
+            .then(dbUserData => {
+                if (!dbUserData) {
+                    // If there is no matching id for the Thought requested, log an error
+                    res.status(404).json({ message: "No User with this id exists" });
+                    return;
+                }
+                res.json(dbUserData); // Returning the result data as JSON Object
+            })
+            .catch(err => res.json(err)); // if there is an error, it will log an error
+    },
+    
 }

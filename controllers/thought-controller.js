@@ -60,6 +60,25 @@ const thoughtController = {
             })
             .catch(err => res.json(err)); // if there is an error, it will log an error
     },
+    /* Updates one of the thoughts from the thoughtSchema, uses Thought.findOneAndUpdate to find one document within that has a matching id parameter and update it with the body from the put request,
+    new: true to return the modified document,
+    runValidators: true to validate the document before updating
+    */
+    updateThought({ params, body }, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.id },
+            body,
+            { new: true, runValidators: true }
+        )
+            .then(updatedThought => {
+                if (!updatedThought) {
+                    // If there is no matching id for the Thought requested, log an error
+                    return res.status(404).json({ message: 'No Thought with this id exists' });
+                }
+                res.json(updatedThought); // Returning the result data as JSON Object
+            })
+            .catch(err => res.json(err)); // if there is an error, it will log an error
+    },
     // Deletes one of the thoughts from the thoughtSchema, uses Thought.findOneAndDelete to find one document within that has a matching id parameter and deletes it
     removeThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.thoughtId })

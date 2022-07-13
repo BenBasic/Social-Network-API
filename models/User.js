@@ -18,6 +18,7 @@ const userSchema = new Schema({
         first checking for characters a-z, 0-9, _.-, then @, then digit characters (0-9), a-z, .-, then . then a-z, .,
         this would roughly translate into the typical email format of something@something.com
         */
+        // NOTE TO SELF: Can also use mongoose-type-email or validator package for validation to avoid working with regex if it's being problematic
         email: {
             type: String,
             required: true,

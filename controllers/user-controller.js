@@ -72,4 +72,33 @@ const userController = {
         })
         .catch((err) => res.status(400).json(err)); // if there is an error, it will log an error
     },
+    // Deletes one of the users from the userSchema, uses User.findOneAndDelete to find one document within that has a matching id parameter and deletes it
+    deleteUser({ params }, res) {
+        User.findOneAndDelete({ _id: params.id })
+        .then((dbUserData) => {
+            if(!dbUserData) {
+                // If there is no matching id for the User requested, log an error
+                res.status(404).json({ message: "No user found with this id" });
+                return;
+            }
+            /* Updating many items in the userSchema,
+            using $in to select the documents where the value of _id equals any value in the friends array,
+            using $pull to remove all friends with matching ids (this removes the user being deleted from all friends lists)
+            */
+            User.updateMany(
+                { _id: { $in: dbUserData.friends } },
+                { $pull: { friends: params.id } }
+            )
+            .then(() => {
+                // Deletes all thoughts from any user with a matching username, this would delete all thoughts from the deleted user
+                Thought.deleteMany({ username: dbUserData.username })
+                .then(() => {
+                    res.json({ message: "User is now deleted" }) // Logs a confirmation message
+                })
+                .catch((err) => res.status(400).json(err)); // if there is an error, it will log an error
+            })
+            .catch((err) => res.status(400).json(err)); // if there is an error, it will log an error
+        })
+        .catch((err) => res.status(400).json(err)); // if there is an error, it will log an error
+    },
 }

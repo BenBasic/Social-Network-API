@@ -1,28 +1,21 @@
 // Setting up file requirements
-const express = require('express');
-const mongoose = require('mongoose')
-const app = express();
+const express = require("express");
+const db = require("./config/connection");
+// Initializing routes
+const routes = require("./routes");
 
 // Defining the server port
 const PORT = process.env.PORT || 3001;
+const app = express();
 
 // Initializing server
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-
-// Initializing routes
-app.use(require('./routes'));
-
-// Initializing the session
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pizza-hunt', {
-  useFindAndModify: false,
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-// This will to log mongo queries being executed
-mongoose.set('debug', true);
+app.use(express.json());
+app.use(routes);
 
 // Turns on connection to database and then to the server and logs a message so the user knows they're connected
-app.listen(PORT, () => console.log(`🌍 Connected on localhost:${PORT}`));
+db.once("open", () => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}!`);
+  });
+});

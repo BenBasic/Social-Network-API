@@ -1,5 +1,6 @@
 // Setting up file requirements
 const { Schema, model, Types } = require('mongoose');
+const moment = require("moment");
 
 const reactionSchema = new Schema ({
     /* Setting the type to the ObjectId of the current schema which is Thought,
@@ -31,7 +32,7 @@ const reactionSchema = new Schema ({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: (createdAtVal) => dateFormat(createdAtVal)
+        get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
     }
 },
 {
@@ -60,7 +61,7 @@ const thoughtSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: (createdAtVal) => dateFormat(createdAtVal)
+        get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
     },
     /* Making the username require a string value,
     the username property is a required property in the thoughtSchema,

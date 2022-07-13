@@ -31,6 +31,9 @@ router
 router
     .route('/:thoughtId/reactions')
     .post(addReaction)
+
+router
+    .route('/:thoughtId/reactions/:reactionId')
     .delete(removeReaction)
 
 // Exports module for use in other files

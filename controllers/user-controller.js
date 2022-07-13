@@ -87,7 +87,7 @@ const userController = {
             */
             User.updateMany(
                 { _id: { $in: dbUserData.friends } },
-                { $pull: { friends: params.id } }
+                { $pull: { friends: params.friendId } }
             )
             .then(() => {
                 // Deletes all thoughts from any user with a matching username, this would delete all thoughts from the deleted user

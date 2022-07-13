@@ -103,5 +103,20 @@ const thoughtController = {
             })
             .catch(err => res.json(err)); // if there is an error, it will log an error
     },
-    
+    /* Removes one of the reactions from the thoughtSchema from a thought's reaction list, uses Thought.findByOneAndUpdate to find one document within that has a matching id parameter and removes it,
+    then uses $pull to remove a reaction from the reactions array,
+    new: true to return the modified document
+    */
+    removeReaction({ params }, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $pull: { reactions: { reactionId: params.reactionId } } },
+            { new: true }
+        )
+            .then(dbUserData => res.json(dbUserData)) // Returning the result data as JSON Object
+            .catch(err => res.json(err)); // if there is an error, it will log an error
+    }
 }
+
+// Exports module for use in other files
+module.exports = ThoughtController

@@ -78,7 +78,7 @@ const userController = {
         .then((dbUserData) => {
             if(!dbUserData) {
                 // If there is no matching id for the User requested, log an error
-                res.status(404).json({ message: "No user found with this id" });
+                res.status(404).json({ message: "No user with this id exists" });
                 return;
             }
             /* Updating many items in the userSchema,
@@ -101,4 +101,28 @@ const userController = {
         })
         .catch((err) => res.status(400).json(err)); // if there is an error, it will log an error
     },
+    /* Adds one of the users from the userSchema to a user's friend list, uses User.findByIdAndUpdate to find one document within that has a matching id parameter,
+    then uses $addToSet to add a friend to the friends unless the friend is already present in the array
+    */
+    addFriend({ params }, res) {
+        User.findByIdAndUpdate(
+            { _id: params.id },
+            { $addToSet: { friends: params.friendId } },
+            { new: true }
+        )
+        .select('-__v') // Excludes the __v property
+        .then((dbUserData) => {
+            if(!dbUserData) {
+                // If there is no matching id for the User requested, log an error
+                res.status(404).json({ message: "No user with this id exists" });
+                return;
+            }
+            res.json(dbUserData); // Returning the result data as JSON Object
+        })
+        .catch((err) => {
+            // if there is an error, it will log an error
+            res.status(400).json(err);
+        })
+    },
+    
 }

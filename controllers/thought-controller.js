@@ -60,5 +60,27 @@ const thoughtController = {
             })
             .catch(err => res.json(err)); // if there is an error, it will log an error
     },
-    
+    // Deletes one of the thoughts from the thoughtSchema, uses Thought.findOneAndDelete to find one document within that has a matching id parameter and deletes it
+    removeThought({ params }, res) {
+        Thought.findOneAndDelete({ _id: params.thoughtId })
+            .then(deletedthought => {
+                if (!deletedthought) {
+                    // If there is no matching id for the Thought requested, log an error
+                    return res.status(404).json({ message: 'No Thought with this id exists' });
+                }
+                /* Updates one of the users from the userSchema, uses User.findOneAndUpdate to find one document within that has a matching id parameter,
+                then pulls the selected thought from the thoughts array,
+                new: true to return the modified document
+                */
+                return User.findOneAndUpdate(
+                    { _id: params.username },
+                    { $pull: { thoughts: params.thoughtId } },
+                    { new: true }
+                );
+            })
+            .then(dbUserData => {
+                res.json(dbUserData); // Returning the result data as JSON Object
+            })
+            .catch(err => res.json(err)); // if there is an error, it will log an error
+    },
 }

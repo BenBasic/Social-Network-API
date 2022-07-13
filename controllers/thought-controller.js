@@ -119,4 +119,4 @@ const thoughtController = {
 }
 
 // Exports module for use in other files
-module.exports = ThoughtController
+module.exports = thoughtController

@@ -82,11 +82,9 @@ const userController = {
                 return;
             }
             /* Updating many items in the userSchema,
-            using $in to select the documents where the value of _id equals any value in the friends array,
             using $pull to remove all friends with matching ids (this removes the user being deleted from all friends lists)
             */
             User.updateMany(
-                { _id: { $in: dbUserData.friends } },
                 { $pull: { friends: { $in: params.id } } },
                 console.log("Friends thing: " + dbUserData.friends),
                 console.log("Params thing: " + params.id)

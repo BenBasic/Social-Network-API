@@ -83,4 +83,25 @@ const thoughtController = {
             })
             .catch(err => res.json(err)); // if there is an error, it will log an error
     },
+    /* Adds a reaction to the thoughtSchema, uses Thought.findOneAndUpdate to find one document within that has a matching id parameter,
+    then uses $push to add the reaction body from the post request to the reactions array inside of the selected thought,
+    new: true to return the modified document
+    */
+    addReaction({ params, body }, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $push: { reactions: body } },
+            { new: true }
+        )
+            .then(dbUserData => {
+                if (!dbUserData) {
+                    // If there is no matching id for the Thought requested, log an error
+                    res.status(404).json({ message: "No User with this id exists" });
+                    return;
+                }
+                res.json(dbUserData); // Returning the result data as JSON Object
+            })
+            .catch(err => res.json(err)); // if there is an error, it will log an error
+    },
+    
 }

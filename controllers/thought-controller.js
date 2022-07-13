@@ -65,11 +65,10 @@ const thoughtController = {
     runValidators: true to validate the document before updating
     */
     updateThought({ params, body }, res) {
-        Thought.findOneAndUpdate(
-            { _id: params.id },
-            body,
-            { new: true, runValidators: true }
-        )
+        Thought.findOneAndUpdate({ _id: params.thoughtId }, body, {
+                new: true,
+                runValidators: true 
+            })
             .then(updatedThought => {
                 if (!updatedThought) {
                     // If there is no matching id for the Thought requested, log an error

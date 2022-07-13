@@ -4,6 +4,7 @@ const {
     getAllThoughts,
     getThoughtById,
     addThought,
+    updateThought,
     removeThought,
     addReaction,
     removeReaction
@@ -23,7 +24,7 @@ router
 router
     .route('/:thoughtId')
     .get(getThoughtById)
-    .put(addThought)
+    .put(updateThought)
     .delete(removeThought)
 
 // Routes for reaction related requests (which are within Thought, hence needing thoughtId) such as addReaction, and removeReaction

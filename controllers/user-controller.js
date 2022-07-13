@@ -124,5 +124,27 @@ const userController = {
             res.status(400).json(err);
         })
     },
-    
+    /* Removes one of the users from the userSchema from a user's friend list, uses User.findByIdAndUpdate to find one document within that has a matching id parameter and removes it,
+    then uses $pull to remove a friend from the friends array
+    */
+    removeFriend({ params }, res) {
+        User.findByIdAndUpdate(
+            { _id: params.id },
+            { $pull: { friends: params.friendId } },
+            { new: true, runValidators: true }
+        )
+        .select("-__v") // Excludes the __v property
+        .then((dbUserData) => {
+            if (!dbUserData) {
+                // If there is no matching id for the User requested, log an error
+                res.status(404).json({ message: "No friend with this id exists" });
+                return;
+            }
+            res.json(dbUserData); // Returning the result data as JSON Object
+        })
+        .catch((err) => res.status(400).json(err)); // if there is an error, it will log an error
+    }
 }
+
+// Exports module for use in other files
+module.exports = userController

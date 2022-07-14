@@ -30,7 +30,8 @@
 
   ## Usage
 
-  Use Insomnia to get, post, put, and delete information within the database
+  Use Insomnia to get, post, put, and delete information within the database.
+  Database is not seeded before hand, so you will need to use post requests to populate the database.
   
 ## License
     This work is licensed under Creative Commons Attribution 3.0 Unported License.
